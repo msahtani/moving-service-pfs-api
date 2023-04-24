@@ -1,0 +1,62 @@
+### SIGNUP AS CLIENT
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "mohcine sahtani",
+  "email": "{{clientEmail}}",
+  "phoneNumber": "+212704261627",
+  "password": "{{password}}"
+}
+
+### SIGNUP AS PROVIDER
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "yassine sahtani",
+  "email": "{{providerEmail}}",
+  "phoneNumber": "+212704261627",
+  "password": "{{password}}",
+  "provider": true
+}
+
+### ADD A DEMAND
+POST http://localhost:8080/api/v1/demand
+Authorization: {{clientToken}}
+Content-Type: application/json
+
+{
+  "title": "moving from safi to marrakech",
+  "description": "some description",
+  "from": "Safi",
+  "to": "Marrakech"
+}
+
+### ADD ANOTHER DEMAND
+POST http://localhost:8080/api/v1/demand
+Authorization: {{clientToken}}
+Content-Type: application/json
+
+{
+  "title": "moving from safi to marrakech (1)",
+  "description": "some description",
+  "from": "Safi",
+  "to": "Marrakech"
+}
+
+### ADD AN OFFER
+POST http://localhost:8080/api/v1/demand/3/offer?price=400
+Authorization: {{providerToken}}
+
+### ACCEPT THE OFFER
+PUT http://localhost:8080/api/v1/offer/1/accept
+Authorization: {{clientToken}}
+
+### GET DEMANDS FROM THE PROVIDER (*)
+GET http://localhost:8080/api/v1/demand
+Authorization: {{providerToken}}
+
+### GET OFFERS
+GET http://localhost:8080/api/v1/demand/3/offer
+Authorization: {{clientToken}}
