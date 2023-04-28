@@ -11,9 +11,10 @@ import java.util.List;
 @Repository
 public interface DemandRepository extends JpaRepository<Demand, Long> {
 
-    @Query(value = "SELECT d FROM Demand d WHERE d.sCity= :city " +
+    @Query( "SELECT d FROM Demand d WHERE d.sCity= :city " +
             "AND d NOT IN (SELECT s.offer.demand FROM Service s " +
-            "WHERE s.status = 'DONE')")
+            "WHERE s.status = 'DONE' )"
+    )
     List<Demand> findForProvider(String city);
 
 

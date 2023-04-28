@@ -48,4 +48,26 @@ public class ServiceService {
         return 0;
     }
 
+    public int markServiceAsDone(long id, int rate){
+        // check authentication
+        Optional<Client> clientBox = Auths.getClient();
+        if(clientBox.isEmpty()) return 1;
+
+        // check the existence of the service
+        Optional<Service> service = serviceRepository.findById(id);
+        if(service.isEmpty()) return 2;
+
+        // client or the provider has the right to cancel the service
+        User user = clientBox.get();
+
+        Client client = service.get().getOffer().getDemand().getClient();
+        if(client.getId() != user.getId())
+            return 3;
+
+        serviceRepository.setStatus(id, ServiceStatus.DONE);
+
+        return 0;
+
+    }
+
 }
