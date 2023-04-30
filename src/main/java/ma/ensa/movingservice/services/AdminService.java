@@ -2,10 +2,11 @@ package ma.ensa.movingservice.services;
 
 import lombok.RequiredArgsConstructor;
 import ma.ensa.movingservice.dto.UserDTO;
+import ma.ensa.movingservice.exceptions.PermissionException;
+import ma.ensa.movingservice.exceptions.RecordNotFoundException;
 import ma.ensa.movingservice.models.user.Admin;
 import ma.ensa.movingservice.repositories.user.AdminRepository;
 import ma.ensa.movingservice.repositories.user.ProviderRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,33 +19,21 @@ public class AdminService {
     private final AdminRepository adminRepository;
 
 
-    private Admin getAdmin(){
-        try {
-            return (Admin) SecurityContextHolder
-                    .getContext()
-                    .getAuthentication()
-                    .getPrincipal();
-
-        }catch (ClassCastException e){
-            e.printStackTrace();
-            return null;
-        }
+    public void acceptProvider(long id) throws Exception{
+        Admin admin = Auths.getAdmin();
+        int rec = providerRepository.acceptProvider(id, admin.getId());
+        if(rec == 0)
+            throw new RecordNotFoundException("provider not found");
     }
 
-    public int acceptProvider(long id){
-        Admin admin = getAdmin();
-        if(admin == null) return 2;
-        int rec = providerRepository.acceptProvider(id, admin);
-        if(rec == 0) return 1;
-        return 0;
-    }
+    public void createAdmin(UserDTO dto) throws Exception{
 
-    public boolean createAdmin(UserDTO dto){
+        Admin admin = Auths.getAdmin(), newAdmin;
 
-        Admin admin = getAdmin(), newAdmin;
-
-        if(admin == null || !admin.isSudo()){
-            return false;
+        if(!admin.isSudo()){
+            throw new PermissionException(
+                    "forbidden ... you must be sudo admin "
+            );
         }
 
         String encodedPassword =
@@ -60,18 +49,19 @@ public class AdminService {
 
         adminRepository.save(newAdmin);
 
-        return true;
     }
 
-    public boolean deleteAdmin(long id){
+    public void deleteAdmin(long id) throws Exception{
 
-        Admin admin = getAdmin();
-        if(admin == null || !admin.isSudo())
-            return false;
+        Admin admin = Auths.getAdmin();
+        if(admin.isSudo())
+            throw new PermissionException(
+                    "forbidden ... you must be sudo admin "
+            );
 
         adminRepository.deleteById(id);
 
-        return true;
+
     }
 
 }

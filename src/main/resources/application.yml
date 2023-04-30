@@ -6,13 +6,19 @@ spring:
         driver-classname: com.mysql.cj.jdbc.Driver
     jpa:
         hibernate:
-          ddl-auto: update
-
+            ddl-auto: update
         show-sql: false
         properties:
-          hibernate:
-            format_sql: true
+            hibernate:
+                format_sql: true
         database: mysql
         database-platform: org.hibernate.dialect.MySQLDialect
         open-in-view: false
-
+    mail:
+        host: stmp.gmail.com
+        port: 587
+        username: mohcine.sahtani@gmail.com
+        password: flhehemnqboxppaz
+        properties.mail.stmp:
+            auth: true
+            starttls.enable: true

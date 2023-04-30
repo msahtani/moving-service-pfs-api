@@ -2,6 +2,8 @@ package ma.ensa.movingservice.services;
 
 import lombok.RequiredArgsConstructor;
 import ma.ensa.movingservice.dto.DemandDTO;
+import ma.ensa.movingservice.exceptions.PermissionException;
+import ma.ensa.movingservice.exceptions.RecordNotFoundException;
 import ma.ensa.movingservice.models.Demand;
 import ma.ensa.movingservice.models.user.Client;
 import ma.ensa.movingservice.models.user.Provider;
@@ -9,7 +11,6 @@ import ma.ensa.movingservice.repositories.DemandRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,19 +20,21 @@ public class DemandService {
 
     private final DemandRepository demandRepository;
 
-    public Optional<Demand> getDemand(long id){
-        return demandRepository.findById(id);
+    public Demand getDemand(long id) throws Exception{
+
+        Optional<Demand> demand = demandRepository.findById(id);
+        if(demand.isEmpty())
+            throw new RecordNotFoundException("demand not found");
+
+        return demand.get();
     }
 
 
-    public List<DemandDTO> findForProvider(){
+    public List<DemandDTO> findForProvider() throws Exception{
 
-        Optional<Provider> provider = Auths.getProvider();
+        Provider provider = Auths.getProvider();
 
-        if(provider.isEmpty())
-            return Collections.emptyList();
-
-        String city = provider.get().getCity();
+        String city = provider.getCity();
 
         return demandRepository
                 .findForProvider(city)
@@ -46,24 +49,17 @@ public class DemandService {
                 ).toList();
     }
 
-    public List<Demand> findClientDemands(){
+    public List<Demand> findClientDemands() throws Exception{
 
         // TODO: complete this
-        Optional<Client> client = Auths.getClient();
+        Client client = Auths.getClient();
 
-        if(client.isEmpty())
-            return Collections.emptyList();
-
-        return demandRepository.findAllByClient(client.get());
+        return demandRepository.findAllByClient(client);
 
     }
 
-    public boolean addDemand(DemandDTO dto){
-        Optional<Client> client = Auths.getClient();
-
-        if(client.isEmpty()){
-            return false;
-        }
+    public void addDemand(DemandDTO dto) throws Exception{
+        Client client = Auths.getClient();
 
         System.out.println(dto);
 
@@ -72,32 +68,27 @@ public class DemandService {
                 .description(dto.getDescription())
                 .sCity(dto.getFrom())
                 .dCity(dto.getTo())
-                .client(client.get())
+                .client(client)
                 .createdAt(LocalDateTime.now())
                 .build();
 
         demandRepository.save(demand);
 
-        return true;
     }
 
-    public int editDemand(long id, DemandDTO dto){
+    public void editDemand(long id, DemandDTO dto) throws Exception{
 
-        Optional<Client> client = Auths.getClient();
-
-        if(client.isEmpty()){
-            return 3;
-        }
+        Client client = Auths.getClient();
 
         Optional<Demand> demandBox = demandRepository.findById(id);
 
         if(demandBox.isEmpty())
-            return 2;
+            throw new RecordNotFoundException("demand not found");
 
         Demand demand = demandBox.get();
 
-        if(client.get().getId() != demand.getClient().getId())
-            return 1;
+        if(client.getId() != demand.getClient().getId())
+            throw new PermissionException("the demand is not belong to you");
 
         demand.setTitle(dto.getTitle());
         demand.setDescription(dto.getDescription());
@@ -106,29 +97,24 @@ public class DemandService {
 
         demandRepository.save(demand);
 
-        return 0;
     }
 
-    public int deleteDemand(long id){
+    public void deleteDemand(long id) throws Exception{
 
-        Optional<Client> client = Auths.getClient();
-
-        if(client.isEmpty())
-            return 3;
+        Client client = Auths.getClient();
 
         Optional<Demand> demandBox = demandRepository.findById(id);
 
         if(demandBox.isEmpty())
-            return 2;
+            throw new RecordNotFoundException("demand not found");
 
         Demand demand = demandBox.get();
 
-        if(client.get().getId() != demand.getClient().getId())
-            return 1;
+        if(client.getId() != demand.getClient().getId())
+            throw new PermissionException("this demand does not belong to you");
 
         demandRepository.delete(demand);
 
-        return 0;
     }
 
 }

@@ -47,8 +47,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwt = header.substring(7);
 
         username = jwtService.extractUsername(jwt);
-        System.out.println(username);
-        logger.debug("email: " + username);
 
         UserDetails userDetails = userService.loadUserByUsername(username);
 
@@ -68,9 +66,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder
                     .getContext()
                     .setAuthentication(authToken);
-
-            System.out.println("kolchi zin");
-
         }
 
         filterChain.doFilter(request, response);

@@ -17,17 +17,15 @@ public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
 
-    public int addVehicle(VehicleDTO dto){
+    public int addVehicle(VehicleDTO dto) throws Exception{
 
-        Optional<Provider> provider = Auths.getProvider();
-
-        if(provider.isEmpty()) return 1;
+        Provider provider = Auths.getProvider();
 
         Vehicle vehicle = Vehicle.builder()
                 .brand(dto.getBrand())
                 .imm(dto.getImm())
                 .model(dto.getModel())
-                .provider(provider.get())
+                .provider(provider)
                 .build();
 
         vehicleRepository.save(vehicle);
@@ -41,19 +39,16 @@ public class VehicleService {
         2 --> vehicle not found
         3 --> you're not permitted to delete
      */
-    public int deleteVehicle(String imm){
+    public int deleteVehicle(String imm) throws Exception{
 
-        Optional<Provider> provider = Auths.getProvider();
-
-        if(provider.isEmpty())
-            return 1;
+        Provider provider = Auths.getProvider();
 
         Optional<Vehicle> vehicle = vehicleRepository.findById(imm);
 
         if(vehicle.isEmpty())
             return 2;
 
-        if(vehicle.get().getProvider().getId() != provider.get().getId())
+        if(vehicle.get().getProvider().getId() != provider.getId())
             return 3;
 
         vehicleRepository.deleteById(imm);
@@ -62,29 +57,25 @@ public class VehicleService {
     }
 
 
-    public int verifyVehicle(String imm){
+    public void verifyVehicle(String imm) throws Exception{
 
-        Optional<Admin> admin = Auths.getAdmin();
-        if(admin.isEmpty()) return 1;
+        Admin admin = Auths.getAdmin();
 
-        vehicleRepository.verifyVehicle(imm, admin.get());
+        vehicleRepository.verifyVehicle(imm, admin);
 
-        return 0;
     }
 
-    public int verifyAllVehicles(long providerId){
+    public void verifyAllVehicles(long providerId) throws Exception{
 
-        Optional<Admin> admin = Auths.getAdmin();
-        if(admin.isEmpty()) return 1;
+        vehicleRepository.verifyAllVehicles(
+                providerId,
+                Auths.getAdmin()
+        );
 
-        vehicleRepository.verifyAllVehicles(providerId, admin.get());
-
-        return 0;
     }
 
     public List<Vehicle> getVehicles(long providerId){
         return vehicleRepository.getAllByProvider(providerId);
     }
-
 
 }

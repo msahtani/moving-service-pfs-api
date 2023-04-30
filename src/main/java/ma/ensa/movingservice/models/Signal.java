@@ -1,6 +1,5 @@
 package ma.ensa.movingservice.models;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -14,7 +13,7 @@ import ma.ensa.movingservice.models.user.User;
 @AllArgsConstructor
 @Builder
 
-@Entity
+
 public class Signal {
 
     @Id

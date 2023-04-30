@@ -37,4 +37,7 @@ public class Service {
     @Enumerated(value = EnumType.STRING)
     private ServiceStatus status;
 
+    @OneToOne
+    private Rate rate;
+
 }

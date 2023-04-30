@@ -1,0 +1,45 @@
+### SIGNUP AS CLIENT
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "mohcine sahtani",
+  "email": "mohcine.sahtani@gmail.com",
+  "phoneNumber": "+212704261627",
+  "password": "12345678"
+}
+
+### SIGNIN AS CLIENT WITH WRONG CRIDENTIAL
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "mohcine.sahtani@gmail.com",
+  "password": "12345678"
+}
+
+### ADD AN DEMAND
+POST http://localhost:8080/api/v1/demand
+Content-Type: application/json
+Authorization: {{clientToken}}
+
+{
+  "title": "moving from safi to marrakech",
+  "from": "Safi",
+  "to": "Marrakech",
+  "description": "some description",
+  "proposedPrice": "400"
+}
+
+### ADD ANOTHER DEMAND
+POST http://localhost:8080/api/v1/demand
+Content-Type: application/json
+Authorization: {{clientToken}}
+
+{
+  "title": "moving from safi to Essaouira",
+  "from": "Safi",
+  "to": "Essaouira",
+  "description": "some description",
+  "proposedPrice": "200"
+}
