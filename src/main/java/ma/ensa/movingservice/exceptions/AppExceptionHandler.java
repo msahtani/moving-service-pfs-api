@@ -1,12 +1,13 @@
 package ma.ensa.movingservice.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.naming.AuthenticationException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,9 +56,12 @@ public class AppExceptionHandler {
         return ex.getMessage();
     }
 
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationException.class)
-    public String handleAuthenticationException(){
-        return "something went wrong";
+    public String handleAuthenticationException(
+            AuthenticationException ex
+    ){
+        return ex.getMessage();
     }
 }

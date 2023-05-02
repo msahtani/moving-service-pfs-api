@@ -16,21 +16,20 @@ public class OfferController {
     private final OfferService service;
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/demand/{id}/offer")
+    @GetMapping("/demand/{id}/offers")
     public List<OfferDTO> getOffers(@PathVariable long id){
         return service.getOffers(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/demand/{id}/offer")
+    @PostMapping("/demand/{id}/")
     public String addOffer (
             @PathVariable long id,
             @RequestBody OfferDTO dto
     ) throws Exception{
         service.addOffer(id, dto.getPrice());
-        return "added successfully";
+        return "offer created successfully";
     }
-
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/offer/{id}")
@@ -40,7 +39,7 @@ public class OfferController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/offer/{id}/accept")
+    @PostMapping("/offer/{id}/accept")
     public String acceptOffer(
             @PathVariable long id
     ) throws Exception{

@@ -29,6 +29,8 @@ public class Vehicle {
     @ManyToOne
     private Provider provider;
 
+    private String imageName;
+
     @ManyToOne
     private Admin verifiedBy;
 

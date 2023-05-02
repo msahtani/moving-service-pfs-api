@@ -6,6 +6,8 @@ import ma.ensa.movingservice.dto.auth.AuthRequest;
 import ma.ensa.movingservice.dto.auth.AuthResponse;
 import ma.ensa.movingservice.dto.auth.RegisterRequest;
 import ma.ensa.movingservice.exceptions.EmailNotAvailableException;
+import ma.ensa.movingservice.features.mail.Email;
+import ma.ensa.movingservice.features.mail.EmailService;
 import ma.ensa.movingservice.models.user.Client;
 import ma.ensa.movingservice.models.user.Provider;
 import ma.ensa.movingservice.models.user.User;
@@ -22,11 +24,11 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UserRepository userRepository;
-
     private final UserService userService;
     private final JwtService jwtService;
     public final  AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
 
     public AuthResponse register(RegisterRequest request) throws Exception{
@@ -58,6 +60,14 @@ public class AuthService {
 
         userRepository.save(user);
 
+        emailService.sendEmail(
+                Email.builder()
+                        .subject("just a test")
+                        .recipient(request.getEmail())
+                        .msgBody("welcome to our app")
+                        .build()
+        );
+
         return AuthResponse.builder()
                 .token(jwtService.generateToken(user))
                 .userType(user.getClass().getSimpleName())
@@ -70,11 +80,18 @@ public class AuthService {
                 request.getEmail()
         );
 
-
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(), request.getPassword()
                 )
+        );
+
+        emailService.sendEmail(
+                Email.builder()
+                        .subject("just a test")
+                        .recipient(request.getEmail())
+                        .msgBody("hi hitler bitch")
+                        .build()
         );
 
         return AuthResponse.builder()

@@ -18,19 +18,23 @@ public class AdminService {
     private final ProviderRepository providerRepository;
     private final AdminRepository adminRepository;
 
+    private final VehicleService vehicleService;
+
 
     public void acceptProvider(long id) throws Exception{
         Admin admin = Auths.getAdmin();
         int rec = providerRepository.acceptProvider(id, admin.getId());
         if(rec == 0)
             throw new RecordNotFoundException("provider not found");
+
+        vehicleService.verifyAllVehicles(id);
     }
 
     public void createAdmin(UserDTO dto) throws Exception{
 
         Admin admin = Auths.getAdmin(), newAdmin;
 
-        if(!admin.isSudo()){
+        if(!admin.sudo()){
             throw new PermissionException(
                     "forbidden ... you must be sudo admin "
             );
@@ -44,23 +48,22 @@ public class AdminService {
                 .email(dto.getEmail())
                 .phoneNumber(dto.getPhoneNumber())
                 .password(encodedPassword)
-                .sudo(false)
                 .build();
 
         adminRepository.save(newAdmin);
-
     }
 
     public void deleteAdmin(long id) throws Exception{
 
         Admin admin = Auths.getAdmin();
-        if(admin.isSudo())
+        if(!admin.sudo())
             throw new PermissionException(
                     "forbidden ... you must be sudo admin "
             );
 
-        adminRepository.deleteById(id);
-
+        if(adminRepository.deleteById(id) == 0){
+            throw new PermissionException("you cannot delete yourself");
+        };
 
     }
 

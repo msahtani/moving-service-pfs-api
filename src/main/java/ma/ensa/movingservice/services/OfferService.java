@@ -32,9 +32,9 @@ public class OfferService {
                 .stream()
                 .map(offer -> OfferDTO
                         .builder()
+                        .id(offer.getId())
                         .providerId(offer.getProvider().getId())
                         .providerName(offer.getProvider().getFullName())
-
                         .price(offer.getPrice())
                         .build()
                 ).toList();

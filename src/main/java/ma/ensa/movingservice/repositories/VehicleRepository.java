@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VehicleRepository
@@ -30,6 +31,11 @@ public interface VehicleRepository
     void verifyAllVehicles(
             @Param("id") long providerId,
             @Param("admin") Admin admin
+    );
+
+    @Query("SELECT v.imageName FROM Vehicle v WHERE v.imm = :imm")
+    Optional<String> findImageName(
+            @Param("imm") String imm
     );
 
 }

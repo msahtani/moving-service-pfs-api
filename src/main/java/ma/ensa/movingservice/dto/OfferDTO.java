@@ -7,6 +7,8 @@ import lombok.Data;
 @Builder
 public class OfferDTO {
 
+    private long id;
+
     private long providerId;
 
     private String providerName;

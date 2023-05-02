@@ -27,11 +27,11 @@ public class MovingServiceApp implements CommandLineRunner {
 
         if(adminRepository.count() != 0) return;
 
+        // create the first user (admin)
         Admin admin = Admin.builder()
                 .fullName("admin")
                 .email("admin@movingservice.ma")
                 .password( passwordEncoder.encode("12345678"))
-                .sudo(true)
                 .phoneNumber("+212704261627")
                 .build();
 

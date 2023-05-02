@@ -15,69 +15,21 @@ public class ServiceController {
 
     private final ServiceService service;
 
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}/cancel")
-    public ResponseEntity<?> cancelService(@PathVariable long id) throws Exception{
-
-        String message;
-        HttpStatus status;
-
-        int code = service.cancelService(id);
-
-        switch (code){
-            case 1 -> {
-                message = "authentication required";
-                status = HttpStatus.FORBIDDEN;
-            }
-            case 2 -> {
-                message = "service not found";
-                status = HttpStatus.NOT_FOUND;
-            }
-            case 3 | 4 -> {
-                message = "you are not permitted";
-                status = HttpStatus.FORBIDDEN;
-            }
-            default -> {
-                message = "cancelled successfully";
-                status = HttpStatus.OK;
-            }
-        }
-
-        return new ResponseEntity<>(message, status);
+    public String cancelService(@PathVariable long id) throws Exception{
+        service.cancelService(id);
+        return "cancelled successfully";
     }
 
-
-    @PutMapping("/{id}/done")
-    public ResponseEntity<?> closeService(
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{id}/close")
+    public String closeService(
             @PathVariable long id,
             @RequestBody @Valid RateDTO dto
-            ) throws Exception{
-
-        final String message;
-        final HttpStatus status;
-
-        int code = service.closeService(id, dto);
-
-        switch (code){
-            case 1 -> {
-                message = "authentication required";
-                status = HttpStatus.FORBIDDEN;
-            }
-            case 2 -> {
-                message = "service not found";
-                status = HttpStatus.NOT_FOUND;
-            }
-            case 3 | 4 -> {
-                message = "you are not permitted";
-                status = HttpStatus.FORBIDDEN;
-            }
-            default -> {
-                message = "closed successfully successfully";
-                status = HttpStatus.OK;
-            }
-        }
-
-        return new ResponseEntity<>(message, status);
-
+    ) throws Exception{
+        service.closeService(id, dto);
+        return "closed successfully";
     }
 
 }
