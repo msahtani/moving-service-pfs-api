@@ -29,9 +29,12 @@ api prefix: `http://localhost:8080/api/v1`
 ### Common (Client and Provider)
 * `PUT ~/service/{id}/cancel`: cancel the service
 * `GET ~/provider/{id}`: consult the provider profile (just for the clients and the provider itself)
+* `POST ~/declamation`: add a declamation specifying the __declaimedID__ and __description__ as JSON attributes 
 
 ### Admin:
 * `PUT ~/provider/{id}/accept`: accept the provider and verify all the vehicles
 * `PUT ~/vehicle/{id}/verify`: verify the vehicle given by id
 * `POST ~/admin/`: create an admin (by the super-admin (sudo = true) )
 * `DELETE ~/admin/{id}`: delete the admin given by id (by the super-admin (sudo = true) )
+* `GET ~/declamation`: get all open declamations
+* `PUT ~/declamation/{id}`: close the declamation given by id
