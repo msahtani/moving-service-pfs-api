@@ -11,8 +11,8 @@ import ma.ensa.movingservice.repositories.DeclamationRepository;
 import ma.ensa.movingservice.repositories.user.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
-
 
 @Service
 @RequiredArgsConstructor
@@ -62,8 +62,22 @@ public class DeclamationService {
 
     }
 
-    public void findAll(){
+    public List<DeclamationDto> findAllOpenDeclamations() throws Exception {
+        // requires admin auth
+        Auths.getAdmin();
 
+        return declamationRepository
+                .findAllOpenDeclamations()
+                .stream()
+                .map(
+                    d -> DeclamationDto.builder()
+                        .id(d.getId())
+                        .declaimedName(d.getDeclaimed().getFullName())
+                        .declaimerName(d.getDeclaimer().getFullName())
+                        .description(d.getDescription())
+                        .createdAt(d.getCreatedAt())
+                        .build()
+                ).toList();
     }
 
 }
