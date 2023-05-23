@@ -20,15 +20,7 @@ import java.util.Collection;
 public abstract class User implements UserDetails {
 
     @Id
-    @SequenceGenerator(
-            name = "user_id_sequence",
-            sequenceName = "user_id_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_id_sequence"
-    )
+    @GeneratedValue
     protected long id;
 
     protected String fullName;

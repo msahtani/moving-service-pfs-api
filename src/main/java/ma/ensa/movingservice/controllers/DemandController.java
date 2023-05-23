@@ -16,6 +16,10 @@ public class DemandController {
 
     private final DemandService service;
 
+
+    // TODO: rename the mapping
+
+
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<DemandDTO> getDemandsForProvider() throws Exception{

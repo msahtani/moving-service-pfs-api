@@ -60,13 +60,6 @@ public class AuthService {
 
         userRepository.save(user);
 
-        emailService.sendEmail(
-                Email.builder()
-                        .subject("just a test")
-                        .recipient(request.getEmail())
-                        .msgBody("welcome to our app")
-                        .build()
-        );
 
         return AuthResponse.builder()
                 .token(jwtService.generateToken(user))
@@ -86,13 +79,15 @@ public class AuthService {
                 )
         );
 
-        emailService.sendEmail(
-                Email.builder()
-                        .subject("just a test")
-                        .recipient(request.getEmail())
-                        .msgBody("hi hitler bitch")
-                        .build()
-        );
+        // send email
+
+        Email email = Email.builder()
+                .subject("just a test")
+                .recipient(request.getEmail())
+                .msgBody("hi hitler bitch")
+                .build();
+
+
 
         return AuthResponse.builder()
                 .token(jwtService.generateToken(user))

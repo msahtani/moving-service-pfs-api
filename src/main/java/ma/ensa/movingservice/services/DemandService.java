@@ -49,9 +49,8 @@ public class DemandService {
                 ).toList();
     }
 
-    public List<Demand> findClientDemands() throws Exception{
+    public List<Demand> getAllDemands() throws Exception{
 
-        // TODO: complete this
         Client client = Auths.getClient();
 
         return demandRepository.findAllByClient(client);

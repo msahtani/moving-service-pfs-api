@@ -33,5 +33,4 @@ public class Vehicle {
 
     @ManyToOne
     private Admin verifiedBy;
-
 }

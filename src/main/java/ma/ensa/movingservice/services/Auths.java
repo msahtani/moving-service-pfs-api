@@ -7,12 +7,13 @@ import ma.ensa.movingservice.models.user.Admin;
 import ma.ensa.movingservice.models.user.Client;
 import ma.ensa.movingservice.models.user.Provider;
 import ma.ensa.movingservice.models.user.User;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
 public class Auths {
 
-    public static User getUser() throws UnauthenticatedException {
+    public static @NotNull User getUser() throws UnauthenticatedException {
 
         User user = (User) SecurityContextHolder
                 .getContext()
@@ -25,7 +26,7 @@ public class Auths {
         return user;
     }
 
-    public static Client getClient() throws Exception{
+    public static @NotNull Client getClient() throws Exception{
         try{
             return (Client) getUser();
         }catch (ClassCastException e){
@@ -34,7 +35,7 @@ public class Auths {
 
     }
 
-    public static Provider getProvider() throws Exception {
+    public static @NotNull Provider getProvider() throws Exception {
 
         Provider provider;
         try{
@@ -49,7 +50,7 @@ public class Auths {
         return provider;
     }
 
-    public static Admin getAdmin() throws Exception{
+    public static @NotNull Admin getAdmin() throws Exception{
         try {
             return (Admin) getUser();
         }catch (ClassCastException e){

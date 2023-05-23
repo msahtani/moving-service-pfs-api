@@ -17,15 +17,7 @@ import ma.ensa.movingservice.models.user.Provider;
 public class Offer {
 
     @Id
-    @SequenceGenerator(
-            name = "offer_sequence",
-            sequenceName = "offer_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "offer_sequence"
-    )
+    @GeneratedValue
     private long id;
 
     @ManyToOne

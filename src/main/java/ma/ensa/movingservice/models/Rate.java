@@ -12,15 +12,7 @@ import lombok.NoArgsConstructor;
 public class Rate {
 
     @Id
-    @SequenceGenerator(
-            name = "rate_sequence",
-            sequenceName = "rate_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "rate_sequence"
-    )
+    @GeneratedValue
     private long id;
 
     @OneToOne(mappedBy = "rate")

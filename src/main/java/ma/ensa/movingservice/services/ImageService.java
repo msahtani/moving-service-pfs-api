@@ -40,10 +40,9 @@ public class ImageService {
 
 
 
-
-    public boolean deleteImage(String fileName){
+    public void deleteImage(String fileName){
         Path path = Paths.get(UPLOAD_DIRECTORY, fileName);
-        return path.toFile().delete();
+        path.toFile().delete();
     }
 
     public byte[] getImageBytes(String filename) throws RecordNotFoundException {

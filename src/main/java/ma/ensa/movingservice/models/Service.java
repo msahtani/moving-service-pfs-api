@@ -16,15 +16,7 @@ import ma.ensa.movingservice.enums.ServiceStatus;
 public class Service {
 
     @Id
-    @SequenceGenerator(
-            name = "service_sequence",
-            sequenceName = "service_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            generator = "service_sequence",
-            strategy = GenerationType.SEQUENCE
-    )
+    @GeneratedValue
     private Long id;
 
     @OneToOne(mappedBy = "service")

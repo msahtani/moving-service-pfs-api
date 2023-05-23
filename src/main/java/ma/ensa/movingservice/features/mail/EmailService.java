@@ -8,15 +8,21 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailService extends Thread {
 
     private final JavaMailSender mailSender;
 
     @Value(value = "${spring.mail.username}")
     private String sender;
 
-    public boolean sendEmail(Email email){
+    private static Email email;
 
+    public static void setEmail(Email email){
+        EmailService.email = email;
+    }
+
+    @Override
+    public void run(){
 
         try{
             SimpleMailMessage mailMessage
@@ -30,10 +36,10 @@ public class EmailService {
             mailMessage.setText(email.getMsgBody());
 
             mailSender.send(mailMessage);
-            return true;
+
         }catch (Exception ex){
             ex.printStackTrace();
-            return false;
+
         }
 
     }

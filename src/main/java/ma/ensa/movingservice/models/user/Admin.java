@@ -7,11 +7,12 @@ import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @SuperBuilder
+
 @Entity
 public class Admin extends User {
 
-    public boolean sudo(){
-        return id == 1;
+    public boolean notSudo(){
+        return id != 1L;
     }
 
 }

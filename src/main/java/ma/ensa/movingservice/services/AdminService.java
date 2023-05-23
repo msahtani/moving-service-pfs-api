@@ -34,7 +34,7 @@ public class AdminService {
 
         Admin admin = Auths.getAdmin(), newAdmin;
 
-        if(!admin.sudo()){
+        if(admin.notSudo()){
             throw new PermissionException(
                     "forbidden ... you must be sudo admin "
             );
@@ -56,14 +56,16 @@ public class AdminService {
     public void deleteAdmin(long id) throws Exception{
 
         Admin admin = Auths.getAdmin();
-        if(!admin.sudo())
+        if(admin.notSudo())
             throw new PermissionException(
                     "forbidden ... you must be sudo admin "
             );
 
-        if(adminRepository.deleteById(id) == 0){
+        if(id == 1L){
             throw new PermissionException("you cannot delete yourself");
         };
+
+        adminRepository.deleteById(id);
 
     }
 
