@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ma.ensa.movingservice.models.user.Client;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -25,8 +26,6 @@ public class Demand {
     @ManyToOne
     private Client client;
 
-    private String title;
-
     private String description;
 
     private String sCity;
@@ -35,8 +34,9 @@ public class Demand {
 
     private LocalDateTime approxTime;
 
-    private Double proposedPrice;
+    private double proposedPrice;
 
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
 }

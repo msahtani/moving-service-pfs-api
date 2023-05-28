@@ -2,7 +2,7 @@
 
 
 ## APIs
-api prefix: `http://localhost:8080/api/v1`
+api prefix: `http://localhost:8080/api/v1` (noted as ~)
 ### Authentication
 * `POST ~/auth/login`: login 
 * `POST ~/auth/signup`: signup
@@ -11,7 +11,7 @@ api prefix: `http://localhost:8080/api/v1`
 ### Client:
 * `GET ~/demand`: get all the demand of the client (*)
 * `POST ~/demand/`: create a demand
-* `PUT  ~/demand/{id}`: edit the demand given by id
+* `PUT ~/demand/{id}`: edit the demand given by id
 * `DELETE ~/demand/{id}`: delete the demand given by id
 * `GET ~/demand/{id}/offers`: get all the offers of the demand given by id
 * `POST ~/offer/{id}/accept`: accept the offer given by id (it will create a service object related to it)

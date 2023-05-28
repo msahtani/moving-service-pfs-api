@@ -14,9 +14,8 @@ import java.time.LocalDateTime;
 public class DemandDTO {
 
     private String clientName;
-    private String title;
     private String description;
-    private LocalDateTime when;
+    private String when;
     private Double proposedPrice;
     private String from;
     private String to;
