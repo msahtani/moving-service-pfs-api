@@ -27,7 +27,7 @@ public class DemandService {
 
     @PostConstruct
     public void initFormatter(){
-        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh-mm");
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     }
 
     public Demand getDemand(long id) throws Exception{
@@ -68,8 +68,6 @@ public class DemandService {
 
     public void addDemand(DemandDTO dto) throws Exception{
         Client client = Auths.getClient();
-
-        System.out.println(dto);
 
         Demand demand = Demand.builder()
                 .description(dto.getDescription())
