@@ -6,8 +6,7 @@ import lombok.Data;
 @Data
 public class RegisterRequest {
 
-    // TODO: delete 'provider' flag
-    private boolean provider;
+
     private String fullName;
     @Email(message = "invalid email address")
     private String email;

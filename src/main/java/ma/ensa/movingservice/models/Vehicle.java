@@ -1,9 +1,9 @@
 package ma.ensa.movingservice.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,17 +20,30 @@ import ma.ensa.movingservice.models.user.Provider;
 public class Vehicle {
 
     @Id
+    @GeneratedValue()
+    private Long id;
+
+    @Column(unique = true)
     private String imm;
 
     private String brand;
 
     private String model;
 
-    @ManyToOne
+    @ManyToOne @JsonIgnore
     private Provider provider;
 
     private String imageName;
 
-    @ManyToOne
+    @ManyToOne @JsonIgnore
     private Admin verifiedBy;
+
+    public long providerId(){
+        return provider.getId();
+    }
+
+    public boolean accepted(){
+        return verifiedBy != null;
+    }
+
 }

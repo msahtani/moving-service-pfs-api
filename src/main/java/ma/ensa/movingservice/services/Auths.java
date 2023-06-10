@@ -15,7 +15,7 @@ public class Auths {
 
     public static @NotNull User getUser() throws UnauthenticatedException {
 
-        User user = (User) SecurityContextHolder
+        Object user = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
@@ -23,39 +23,42 @@ public class Auths {
         if(user == null)
             throw new UnauthenticatedException();
 
-        return user;
+        return (User) user;
     }
 
-    public static @NotNull Client getClient() throws Exception{
-        try{
-            return (Client) getUser();
-        }catch (ClassCastException e){
+    public static @NotNull Client getClient(){
+
+        if(!(getUser() instanceof Client client)){
             throw new PermissionException();
         }
 
+        return client;
+
     }
 
-    public static @NotNull Provider getProvider() throws Exception {
+    public static @NotNull Provider getProvider(boolean uncheck) {
 
-        Provider provider;
-        try{
-            provider = (Provider) getUser();
-        }catch (ClassCastException e){
+        if(!(getUser() instanceof Provider provider)){
             throw new PermissionException();
         }
 
-        if(provider.getAcceptedBy() == null)
+        if(!uncheck && provider.getAcceptedBy() == null)
             throw new ProviderNotAccepted();
 
         return provider;
     }
 
-    public static @NotNull Admin getAdmin() throws Exception{
-        try {
-            return (Admin) getUser();
-        }catch (ClassCastException e){
+    public static @NotNull Provider getProvider(){
+        return getProvider(false);
+    }
+
+    public static @NotNull Admin getAdmin(){
+
+        if(!(getUser() instanceof Admin admin)){
             throw new PermissionException();
         }
+
+        return admin;
     }
 
 }

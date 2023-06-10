@@ -13,7 +13,7 @@ public class OfferDTO {
 
     private String providerName;
 
-    private Double price;
+    private double price;
 
     private String description;
 

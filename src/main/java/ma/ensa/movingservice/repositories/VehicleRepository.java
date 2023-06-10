@@ -1,5 +1,6 @@
 package ma.ensa.movingservice.repositories;
 
+import jakarta.transaction.Transactional;
 import ma.ensa.movingservice.models.Vehicle;
 import ma.ensa.movingservice.models.user.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public interface VehicleRepository
         extends JpaRepository<Vehicle, String> {
 
@@ -20,18 +22,18 @@ public interface VehicleRepository
     List<Vehicle> getAllByProvider(@Param("id") long id);
 
     @Modifying
-    @Query("UPDATE Vehicle v SET v.verifiedBy = :admin WHERE v.imm = :imm")
-    void verifyVehicle(
-            @Param("imm")   String imm,
-            @Param("admin") Admin admin
-            );
+    @Query(
+            value = "UPDATE vehicle SET verified_by_id = ? WHERE imm = ?",
+            nativeQuery = true
+    )
+    void verifyVehicle(long adminId, long providerId);
 
     @Modifying
-    @Query("UPDATE Vehicle v SET v.verifiedBy = :admin WHERE v.provider.id = :id")
-    void verifyAllVehicles(
-            @Param("id") long providerId,
-            @Param("admin") Admin admin
-    );
+    @Query(
+            value = "UPDATE vehicle SET verified_by_id = ? WHERE provider_id = ?",
+            nativeQuery = true
+    )
+    void verifyAllVehicles(long adminId, long providerId);
 
     @Query("SELECT v.imageName FROM Vehicle v WHERE v.imm = :imm")
     Optional<String> findImageName(

@@ -1,5 +1,6 @@
 package ma.ensa.movingservice.services;
 
+
 import lombok.RequiredArgsConstructor;
 import ma.ensa.movingservice.dto.ProviderDTO;
 import ma.ensa.movingservice.exceptions.RecordNotFoundException;
@@ -10,6 +11,7 @@ import ma.ensa.movingservice.models.user.Provider;
 import ma.ensa.movingservice.models.user.User;
 import ma.ensa.movingservice.repositories.ServiceRepository;
 import ma.ensa.movingservice.repositories.user.ProviderRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +25,7 @@ public class ProviderService {
     
     private final VehicleService vehicleService;
 
-    private boolean canShowPhoneNumber(long providerId) throws Exception{
+    private boolean canShowPhoneNumber(long providerId){
 
         User user = Auths.getUser();
 
@@ -37,7 +39,7 @@ public class ProviderService {
 
     }
 
-    public ProviderDTO getProviderProfile(long providerId) throws Exception{
+    public ProviderDTO getProviderProfile(long providerId){
 
         Optional<Provider> providerBox = providerRepository.findById(providerId);
         if(providerBox.isEmpty())
@@ -48,10 +50,11 @@ public class ProviderService {
         Provider provider = providerBox.get();
 
         return ProviderDTO.builder()
+                .isAccepted(provider.getAcceptedBy() != null)
                 .fullName(provider.getFullName())
                 .email(provider.getEmail())
                 .phoneNumber(
-                    canShowPhoneNumber(providerId) ? provider.getPhoneNumber() : ""
+                    canShowPhoneNumber(providerId) ? provider.getPhoneNumber() : null
                 )
                 .vehicles(vehicles)
                 .doneServices(doneServices)
@@ -59,4 +62,26 @@ public class ProviderService {
     }
 
 
+    @Transactional
+    public List<ProviderDTO> getAllProviders(boolean unacceptedOnly) {
+
+        Auths.getAdmin();
+
+        List<Provider> providers = (unacceptedOnly) ?
+                providerRepository.findAllByAcceptedByIsNullAndVehiclesIsNotNull()
+                : providerRepository.findAll();
+
+        return providers
+                .stream()
+                .map(
+                        provider -> ProviderDTO.builder()
+                                .id(provider.getId())
+                                .fullName(provider.getFullName())
+                                .email(provider.getEmail())
+                                .phoneNumber(provider.getPhoneNumber())
+                                .vehicles(provider.getVehicles())
+                                .build()
+                ).toList();
+
+    }
 }

@@ -22,8 +22,8 @@ public class DemandController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public List<DemandDTO> getDemandsForProvider() throws Exception{
-        return service.findForProvider();
+    public List<DemandDTO> getDemands(){
+        return service.findAllDemands();
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -34,9 +34,15 @@ public class DemandController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public String addDemand(@RequestBody DemandDTO dto) throws Exception{
-        service.addDemand(dto);
-        return "saved successfully";
+    public String addDemand(@RequestBody DemandDTO dto){
+
+        long id = service.addDemand(dto);
+
+        return String.format("""
+           saved successfully
+           demand id: %d
+           """, id
+        );
     }
 
     @PutMapping("/{id}")

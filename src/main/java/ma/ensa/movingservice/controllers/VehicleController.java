@@ -15,32 +15,39 @@ public class VehicleController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public String addVehicle(@ModelAttribute VehicleDTO dto) throws Exception{
-        service.addVehicle(dto);
-        return "vehicle added successfully";
+    public String addVehicle(@ModelAttribute VehicleDTO dto){
+        long id = service.addVehicle(dto);
+        return String.format("""
+                vehicle added successfully
+                vehicle id: %d
+                """, id
+        );
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{imm}")
-    public String deleteVehicle(@PathVariable String imm) throws Exception{
+    public String deleteVehicle(@PathVariable String imm){
         service.deleteVehicle(imm);
         return "vehicle deleted successfully";
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PutMapping("/{imm}/verify")
-    public String verifyVehicle(@PathVariable String imm) throws Exception{
-        service.verifyVehicle(imm);
+    @PutMapping("/{id}/verify")
+    public String verifyVehicle(@PathVariable long id){
+        service.verifyVehicle(id);
         return "verified";
     }
 
+    /*
     @Deprecated
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping("/{pid}/verifyAll")
-    public String verifyVehicle(@PathVariable long pid) throws Exception{
+    public String verifyAllVehicles(@PathVariable long pid){
         service.verifyAllVehicles(pid);
         return "verified";
     }
+
+     */
 
 
 }

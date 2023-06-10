@@ -19,17 +19,23 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final VehicleService vehicleService;
 
-
     public void acceptProvider(long id) throws Exception {
         Admin admin = Auths.getAdmin();
-        int rec = providerRepository.acceptProvider(id, admin.getId());
-        if (rec == 0)
-            throw new RecordNotFoundException("provider not found");
+
+        if(!providerRepository.existsById(id)){
+            throw new RecordNotFoundException();
+        }
+
+        if(providerRepository.isVerified(id) != 0){
+            throw new PermissionException("the provider is already verified");
+        }
+
+        providerRepository.acceptProvider(id, admin.getId());
 
         vehicleService.verifyAllVehicles(id);
     }
 
-    public void createAdmin(UserDTO dto) throws Exception {
+    public void createAdmin(UserDTO dto) {
 
         Admin admin = Auths.getAdmin(), newAdmin;
 
@@ -52,7 +58,7 @@ public class AdminService {
         adminRepository.save(newAdmin);
     }
 
-    public void deleteAdmin(long id) throws Exception {
+    public void deleteAdmin(long id) {
 
         Admin admin = Auths.getAdmin();
         if (admin.notSudo())

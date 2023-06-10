@@ -21,9 +21,11 @@ public class ImageService {
 
     public String handleImageUpload(@NotNull MultipartFile file) {
 
+        String[] __ = Objects.requireNonNull(file.getOriginalFilename()).split("\\.");
+
         // prepare the filename
         String  dateString = Long.toString(System.currentTimeMillis()),
-                ext = Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[1],
+                ext = __[__.length - 1],
                 fileName = "img-" + dateString + "." + ext;
 
         Path path = Paths.get(UPLOAD_DIRECTORY, fileName);

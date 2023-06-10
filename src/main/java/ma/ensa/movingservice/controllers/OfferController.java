@@ -22,12 +22,12 @@ public class OfferController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/demand/{id}/")
+    @PostMapping("/demand/{id}")
     public String addOffer (
             @PathVariable long id,
             @RequestBody OfferDTO dto
-    ) throws Exception{
-        service.addOffer(id, dto.getPrice());
+    ){
+        service.addOffer(id, dto);
         return "offer created successfully";
     }
 

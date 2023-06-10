@@ -40,15 +40,16 @@ public class OfferService {
                 ).toList();
     }
 
-    public void addOffer(long demandId, double price) throws Exception{
+    public void addOffer(long demandId, OfferDTO dto){
 
         // get the provider
         Provider provider = Auths.getProvider();
 
         // get the demand
-        Optional<Demand> demand = demandRepository.findById(demandId);
-        if(demand.isEmpty())
-            throw new RecordNotFoundException("demand not found");
+        Demand demand = demandRepository
+                .findById(demandId)
+                .orElseThrow(RecordNotFoundException::new);
+
 
         // check if the provider already applied
         if(offerRepository.findByProvider(provider) != 0)
@@ -57,14 +58,15 @@ public class OfferService {
 
         Offer offer = Offer.builder()
                 .provider(provider)
-                .demand(demand.get())
-                .price(price)
+                .demand(demand)
+                .price(dto.getPrice() != 0 ? dto.getPrice() : demand.getProposedPrice())
+                .description(dto.getDescription())
                 .build();
 
         offerRepository.save(offer);
     }
 
-    public void deleteOffer(long id) throws Exception{
+    public void deleteOffer(long id){
 
         // check the provider authentication
         Provider provider = Auths.getProvider();

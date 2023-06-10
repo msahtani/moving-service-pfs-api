@@ -22,14 +22,14 @@ public class VehicleService {
 
     private final ImageService imageService;
 
-    public void addVehicle(VehicleDTO dto) throws Exception{
+    public long addVehicle(VehicleDTO dto){
 
-        Provider provider = Auths.getProvider();
+        Provider provider = Auths.getProvider(true);
 
-        String imageName = null;
-        if(dto.getImage() != null){
-            imageName = imageService.handleImageUpload(dto.getImage());
-        }
+        String imageName = dto.getImage() != null ?
+                imageService.handleImageUpload(dto.getImage())
+                : null;
+
 
         Vehicle vehicle = Vehicle.builder()
                 .brand(dto.getBrand())
@@ -39,20 +39,22 @@ public class VehicleService {
                 .imageName(imageName)
                 .build();
 
-        vehicleRepository.save(vehicle);
+        return vehicleRepository
+                .save(vehicle)
+                .getId();
     }
 
 
-    public void deleteVehicle(String imm) throws Exception{
+    public void deleteVehicle(String imm){
 
         Provider provider = Auths.getProvider();
 
-        Optional<Vehicle> vehicle = vehicleRepository.findById(imm);
+        Vehicle vehicle = vehicleRepository
+                .findById(imm)
+                .orElseThrow(RecordNotFoundException::new);
 
-        if(vehicle.isEmpty())
-            throw new RecordNotFoundException("vehicle not found");
 
-        if(vehicle.get().getProvider().getId() != provider.getId())
+        if(vehicle.getProvider().getId() != provider.getId())
             throw new PermissionException();
 
         // delete the image associated with the vehicle given by id
@@ -64,19 +66,18 @@ public class VehicleService {
     }
 
 
-    public void verifyVehicle(String imm) throws Exception{
+    public void verifyVehicle(long id){
         Admin admin = Auths.getAdmin();
-        vehicleRepository.verifyVehicle(imm, admin);
+        vehicleRepository.verifyVehicle(admin.getId(), id);
     }
 
-    public void verifyAllVehicles(long providerId) throws Exception{
+    public void verifyAllVehicles(long providerId){
         vehicleRepository.verifyAllVehicles(
-            providerId,
-            Auths.getAdmin()
+            Auths.getAdmin().getId(), providerId
         );
     }
 
-    public List<Vehicle> getVehicles(long providerId) throws Exception{
+    public List<Vehicle> getVehicles(long providerId){
         Auths.getUser();
         return vehicleRepository.getAllByProvider(providerId);
     }

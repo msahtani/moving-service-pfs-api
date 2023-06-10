@@ -10,6 +10,7 @@ import ma.ensa.movingservice.models.user.Client;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -38,5 +39,8 @@ public class Demand {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "demand")
+    private List<Offer> offers;
 
 }

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/provider")
 @RequiredArgsConstructor
@@ -16,6 +18,16 @@ public class ProviderController {
 
     private final AdminService adminService;
     private final ProviderService providerService;
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public List<ProviderDTO> getAllProviders(
+            @RequestParam(value = "unaccepted", required = false) String unaccepted
+    ){
+        return providerService.getAllProviders(
+                unaccepted != null
+        );
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")

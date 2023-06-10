@@ -7,9 +7,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @RequiredArgsConstructor
+@EnableTransactionManagement
 public class MovingServiceApp implements CommandLineRunner {
 
     private final AdminRepository adminRepository;
@@ -22,7 +24,7 @@ public class MovingServiceApp implements CommandLineRunner {
 
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args){
 
 
         if(adminRepository.count() != 0) return;
