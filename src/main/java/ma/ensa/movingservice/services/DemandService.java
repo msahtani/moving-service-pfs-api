@@ -56,6 +56,12 @@ public class DemandService {
                                     .proposedPrice(demand.getProposedPrice())
                                     .from(demand.getSCity())
                                     .to(demand.getDCity())
+                                    .when(
+                                            formatter.format(demand.getApproxTime())
+                                    )
+                                    .createdAt(
+                                            formatter.format(demand.getCreatedAt())
+                                    )
                                     .build()
                     )
                     .toList();
