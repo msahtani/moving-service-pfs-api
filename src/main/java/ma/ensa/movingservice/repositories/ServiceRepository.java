@@ -46,4 +46,9 @@ public interface ServiceRepository extends JpaRepository<Service, Long> {
             @Param("clientId") long clientId,
             @Param("providerId") long providerId
     );
+
+
+    @Query("SELECT COUNT(*) FROM Service s WHERE s.offer.provider.id = :id AND s.status = 'DONE'")
+    long countAllDoneServicesByProvider(long id);
+
 }

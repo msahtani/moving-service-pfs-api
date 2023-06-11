@@ -45,19 +45,19 @@ public class ProviderService {
         if(providerBox.isEmpty())
             throw new RecordNotFoundException("provider profile not found");
         
-        List<Service> doneServices = serviceRepository.findDoneServiceByProvider(providerId);
-        List<Vehicle> vehicles = vehicleService.getVehicles(providerId);
+        //List<Service> doneServices = serviceRepository.findDoneServiceByProvider(providerId);
+        //List<Vehicle> vehicles = vehicleService.getVehicles(providerId);
         Provider provider = providerBox.get();
 
         return ProviderDTO.builder()
-                .isAccepted(provider.getAcceptedBy() != null)
                 .fullName(provider.getFullName())
                 .email(provider.getEmail())
                 .phoneNumber(
                     canShowPhoneNumber(providerId) ? provider.getPhoneNumber() : null
                 )
-                .vehicles(vehicles)
-                .doneServices(doneServices)
+                .doneServicesCount(
+                        serviceRepository.countAllDoneServicesByProvider(providerId)
+                )
                 .build();
     }
 
@@ -79,7 +79,9 @@ public class ProviderService {
                                 .fullName(provider.getFullName())
                                 .email(provider.getEmail())
                                 .phoneNumber(provider.getPhoneNumber())
-                                .vehicles(provider.getVehicles())
+                                .doneServicesCount(
+                                        serviceRepository.countAllDoneServicesByProvider(provider.getId())
+                                )
                                 .build()
                 ).toList();
 

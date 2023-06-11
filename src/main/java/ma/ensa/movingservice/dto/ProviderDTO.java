@@ -22,6 +22,5 @@ public class ProviderDTO {
     private String phoneNumber;
     private List<Vehicle> vehicles;
     private List<Service> doneServices;
-    private boolean isAccepted;
-
+    private long doneServicesCount;
 }
