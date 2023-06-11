@@ -16,7 +16,7 @@ import java.util.List;
 public interface ProviderRepository extends JpaRepository<Provider, Long> {
 
 
-    List<Provider> findAllByAcceptedByIsNullAndVehiclesIsNotNull();
+    List<Provider> findAllByAcceptedByIsNull();
 
     @Query("SELECT COUNT(*) FROM Provider WHERE id = :id AND acceptedBy IS NOT NULL")
     long isVerified(@Param("id") long providerId);

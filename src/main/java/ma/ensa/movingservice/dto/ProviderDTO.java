@@ -20,7 +20,6 @@ public class ProviderDTO {
     private String fullName;
     private String email;
     private String phoneNumber;
-    private List<Vehicle> vehicles;
-    private List<Service> doneServices;
     private long doneServicesCount;
+    private double averageRate;
 }

@@ -22,8 +22,6 @@ public class ProviderService {
 
     private final ProviderRepository providerRepository;
     private final ServiceRepository serviceRepository;
-    
-    private final VehicleService vehicleService;
 
     private boolean canShowPhoneNumber(long providerId){
 
@@ -41,13 +39,9 @@ public class ProviderService {
 
     public ProviderDTO getProviderProfile(long providerId){
 
-        Optional<Provider> providerBox = providerRepository.findById(providerId);
-        if(providerBox.isEmpty())
-            throw new RecordNotFoundException("provider profile not found");
-        
-        //List<Service> doneServices = serviceRepository.findDoneServiceByProvider(providerId);
-        //List<Vehicle> vehicles = vehicleService.getVehicles(providerId);
-        Provider provider = providerBox.get();
+        Provider provider = providerRepository
+                .findById(providerId)
+                .orElseThrow(RecordNotFoundException::new);
 
         return ProviderDTO.builder()
                 .fullName(provider.getFullName())
@@ -68,7 +62,7 @@ public class ProviderService {
         Auths.getAdmin();
 
         List<Provider> providers = (unacceptedOnly) ?
-                providerRepository.findAllByAcceptedByIsNullAndVehiclesIsNotNull()
+                providerRepository.findAllByAcceptedByIsNull()
                 : providerRepository.findAll();
 
         return providers
