@@ -62,6 +62,10 @@ public class ServiceService {
                 .findById(id)
                 .orElseThrow(RecordNotFoundException::new);
 
+        if(service.getStatus() == ServiceStatus.DONE){
+            throw new PermissionException("this service is already closed by you");
+        }
+
 
         // client or the provider has the right to cancel the service
         Client owner = service.getOffer().getDemand().getClient();
