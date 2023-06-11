@@ -33,7 +33,7 @@ public class OfferController {
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/offer/{id}")
-    public String deleteOffer(@PathVariable long id) throws Exception{
+    public String deleteOffer(@PathVariable long id){
         service.deleteOffer(id);
         return "deleted successfully";
     }

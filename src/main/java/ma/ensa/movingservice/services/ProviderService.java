@@ -52,6 +52,13 @@ public class ProviderService {
                 .doneServicesCount(
                         serviceRepository.countAllDoneServicesByProvider(providerId)
                 )
+                .averageRate(
+                        serviceRepository
+                                .getAvgRatingByProvider(provider.getId())
+                                .stream().mapToDouble(d -> d)
+                                .average()
+                                .orElse(.0)
+                )
                 .build();
     }
 
@@ -75,6 +82,14 @@ public class ProviderService {
                                 .phoneNumber(provider.getPhoneNumber())
                                 .doneServicesCount(
                                         serviceRepository.countAllDoneServicesByProvider(provider.getId())
+                                )
+                                .averageRate(
+                                        serviceRepository
+                                                .getAvgRatingByProvider(provider.getId())
+                                                .stream()
+                                                .mapToDouble(d -> d)
+                                                .average()
+                                                .orElse(.0)
                                 )
                                 .build()
                 ).toList();

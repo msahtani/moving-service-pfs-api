@@ -51,4 +51,7 @@ public interface ServiceRepository extends JpaRepository<Service, Long> {
     @Query("SELECT COUNT(*) FROM Service s WHERE s.offer.provider.id = :id AND s.status = 'DONE'")
     long countAllDoneServicesByProvider(long id);
 
+    @Query("SELECT r.rate FROM Rate r WHERE r.service.offer.provider.id = :id")
+    List<Double> getAvgRatingByProvider(long id);
+
 }
