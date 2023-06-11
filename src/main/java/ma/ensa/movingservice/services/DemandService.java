@@ -53,6 +53,7 @@ public class DemandService {
                             DemandDTO.builder()
                                     .clientName(demand.getClient().getFullName())
                                     .description(demand.getDescription())
+                                    .proposedPrice(demand.getProposedPrice())
                                     .from(demand.getSCity())
                                     .to(demand.getDCity())
                                     .build()

@@ -53,17 +53,18 @@ public class ServiceService {
 
     }
 
-    public void closeService(long id, RateDTO dto) throws Exception{
+    public void closeService(long id, RateDTO dto){
         // check authentication
         Client client = Auths.getClient();
 
         // check the existence of the service
-        Optional<Service> service = serviceRepository.findById(id);
-        if(service.isEmpty())
-            throw new RecordNotFoundException("service not found");
+        Service service = serviceRepository
+                .findById(id)
+                .orElseThrow(RecordNotFoundException::new);
+
 
         // client or the provider has the right to cancel the service
-        Client owner = service.get().getOffer().getDemand().getClient();
+        Client owner = service.getOffer().getDemand().getClient();
         if(client.getId() != owner.getId())
             throw new PermissionException();
 

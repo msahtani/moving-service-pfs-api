@@ -26,7 +26,6 @@ public class MovingServiceApp implements CommandLineRunner {
     @Override
     public void run(String... args){
 
-
         if(adminRepository.count() != 0) return;
 
         // create the first user (admin)
