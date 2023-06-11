@@ -23,7 +23,7 @@ public interface OfferRepository
 
     @Modifying
     @Query("UPDATE Offer o SET o.service = :service WHERE o.id = :id")
-    int setServiceById(
+    void setServiceById(
             @Param("id") long id,
             @Param("service") Service service
     );

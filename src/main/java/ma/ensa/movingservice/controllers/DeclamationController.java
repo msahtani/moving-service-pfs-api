@@ -17,20 +17,20 @@ public class DeclamationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String addDeclamation(@RequestBody DeclamationDto dto) throws Exception {
+    public String addDeclamation(@RequestBody DeclamationDto dto){
         service.addDeclamation(dto);
         return "the declamation is sent to review by the administrator";
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<DeclamationDto> findAll() throws Exception {
+    public List<DeclamationDto> findAll(){
         return service.findAllOpenDeclamations();
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String closeDeclamation(@PathVariable long id) throws Exception {
+    public String closeDeclamation(@PathVariable long id){
         service.closeDeclamation(id);
         return "closed successfully";
     }

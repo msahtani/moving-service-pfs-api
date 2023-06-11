@@ -1,5 +1,6 @@
 package ma.ensa.movingservice.services;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import ma.ensa.movingservice.dto.DeclamationDto;
 import ma.ensa.movingservice.exceptions.PermissionException;
@@ -12,6 +13,7 @@ import ma.ensa.movingservice.repositories.user.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,13 @@ public class DeclamationService {
     private final DeclamationRepository declamationRepository;
 
     private final UserRepository userRepository;
+
+    private DateTimeFormatter dateTimeFormatter;
+
+    @PostConstruct
+    public void init(){
+        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm");
+    }
 
     public void addDeclamation(@NotNull DeclamationDto dto){
 
@@ -73,8 +82,11 @@ public class DeclamationService {
                         .id(d.getId())
                         .declaimedName(d.getDeclaimed().getFullName())
                         .declaimerName(d.getDeclaimer().getFullName())
+                        .declaimedId(d.getDeclaimed().getId())
                         .description(d.getDescription())
-                        .createdAt(d.getCreatedAt())
+                        .createdAt(
+                                dateTimeFormatter.format(d.getCreatedAt())
+                        )
                         .build()
                 ).toList();
     }

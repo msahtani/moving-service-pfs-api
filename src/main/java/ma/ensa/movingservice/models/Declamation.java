@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import ma.ensa.movingservice.models.user.Admin;
 import ma.ensa.movingservice.models.user.User;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -39,5 +40,6 @@ public class Declamation {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
 
 }
