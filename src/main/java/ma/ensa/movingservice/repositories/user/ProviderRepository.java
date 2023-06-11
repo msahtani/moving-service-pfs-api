@@ -27,5 +27,5 @@ public interface ProviderRepository extends JpaRepository<Provider, Long> {
             value = "UPDATE provider SET accepted_by_id = ? WHERE id = ?",
             nativeQuery = true
     )
-    void acceptProvider(long id, long adminId);
+    void acceptProvider(long id0, long id1);
 }

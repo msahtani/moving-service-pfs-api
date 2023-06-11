@@ -27,6 +27,9 @@ public class OfferService {
     private final ServiceRepository serviceRepository;
 
     public List<OfferDTO> getOffers(long demandId){
+
+        Auths.getUser();
+
         return offerRepository
                 .findByDemandId(demandId)
                 .stream()
@@ -36,6 +39,7 @@ public class OfferService {
                         .providerId(offer.getProvider().getId())
                         .providerName(offer.getProvider().getFullName())
                         .price(offer.getPrice())
+                        .description(offer.getDescription())
                         .build()
                 ).toList();
     }

@@ -19,7 +19,7 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final VehicleService vehicleService;
 
-    public void acceptProvider(long id) throws Exception {
+    public void acceptProvider(long id){
         Admin admin = Auths.getAdmin();
 
         if(!providerRepository.existsById(id)){
@@ -30,7 +30,7 @@ public class AdminService {
             throw new PermissionException("the provider is already verified");
         }
 
-        providerRepository.acceptProvider(id, admin.getId());
+        providerRepository.acceptProvider(admin.getId(), id);
 
         vehicleService.verifyAllVehicles(id);
     }
@@ -45,14 +45,14 @@ public class AdminService {
             );
         }
 
-        String encodedPassword =
-                passwordEncoder.encode(dto.getPassword());
 
         newAdmin = Admin.builder()
                 .fullName(dto.getFullName())
                 .email(dto.getEmail())
                 .phoneNumber(dto.getPhoneNumber())
-                .password(encodedPassword)
+                .password(
+                        passwordEncoder.encode(dto.getPassword())
+                )
                 .build();
 
         adminRepository.save(newAdmin);

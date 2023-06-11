@@ -17,14 +17,14 @@ public class AdminController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public String createAdmin(@RequestBody UserDTO dto) throws Exception{
+    public String createAdmin(@RequestBody UserDTO dto){
         service.createAdmin(dto);
         return "admin created successfully";
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    public String deleteAdmin(@PathVariable long id) throws Exception{
+    public String deleteAdmin(@PathVariable long id){
         service.deleteAdmin(id);
         return "admin deleted successfully";
     }

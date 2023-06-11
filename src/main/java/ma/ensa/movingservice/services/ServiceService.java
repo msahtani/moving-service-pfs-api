@@ -29,21 +29,21 @@ public class ServiceService {
         User user = Auths.getUser();
 
         // check the existence of the service
-        Optional<Service> service = serviceRepository.findById(id);
-        if(service.isEmpty())
-            throw new RecordNotFoundException("service not found");
+        Service service = serviceRepository
+                .findById(id)
+                .orElseThrow(RecordNotFoundException::new);
 
         // client or the provider has the right to cancel the service
 
         if(user instanceof Client){
             // he's the client
-            Client client = service.get().getOffer().getDemand().getClient();
+            Client client = service.getOffer().getDemand().getClient();
             if(client.getId() != user.getId())
                 throw new PermissionException();
 
         }else{
             // he's the provider
-            Provider provider = service.get().getOffer().getProvider();
+            Provider provider = service.getOffer().getProvider();
             if(provider.getId() != user.getId()){
                 throw new PermissionException();
             }

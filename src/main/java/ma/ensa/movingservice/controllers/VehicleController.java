@@ -38,16 +38,4 @@ public class VehicleController {
         return "verified";
     }
 
-    /*
-    @Deprecated
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @PutMapping("/{pid}/verifyAll")
-    public String verifyAllVehicles(@PathVariable long pid){
-        service.verifyAllVehicles(pid);
-        return "verified";
-    }
-
-     */
-
-
 }

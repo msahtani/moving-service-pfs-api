@@ -9,6 +9,7 @@ import ma.ensa.movingservice.models.user.Admin;
 import ma.ensa.movingservice.models.user.User;
 import ma.ensa.movingservice.repositories.DeclamationRepository;
 import ma.ensa.movingservice.repositories.user.UserRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,17 +23,15 @@ public class DeclamationService {
 
     private final UserRepository userRepository;
 
-    public void addDeclamation(DeclamationDto dto) throws Exception{
+    public void addDeclamation(@NotNull DeclamationDto dto){
 
         // get the declaimer
         User declaimer = Auths.getUser();
 
         // get the declaimed
-        Optional<User> _declaimed =  userRepository.findById(dto.getDeclaimedId());
-        if(_declaimed.isEmpty()){
-            throw new RecordNotFoundException("declaimed not found");
-        }
-        User declaimed = _declaimed.get();
+        User declaimed =  userRepository
+                .findById(dto.getDeclaimedId())
+                .orElseThrow(RecordNotFoundException::new);
 
         // check the ability
         if(declaimed.getClass().equals(declaimer.getClass()))
@@ -48,7 +47,7 @@ public class DeclamationService {
         declamationRepository.save(declamation);
     }
 
-    public void closeDeclamation(long id) throws Exception{
+    public void closeDeclamation(long id){
 
         // get the admin
         Admin admin = Auths.getAdmin();
@@ -62,7 +61,7 @@ public class DeclamationService {
 
     }
 
-    public List<DeclamationDto> findAllOpenDeclamations() throws Exception {
+    public List<DeclamationDto> findAllOpenDeclamations(){
         // requires admin auth
         Auths.getAdmin();
 

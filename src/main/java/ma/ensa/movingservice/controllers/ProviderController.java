@@ -31,7 +31,7 @@ public class ProviderController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public ProviderDTO consultProfile(@PathVariable("id") long id) throws Exception{
+    public ProviderDTO consultProfile(@PathVariable long id){
         return providerService.getProviderProfile(id);
     }
 

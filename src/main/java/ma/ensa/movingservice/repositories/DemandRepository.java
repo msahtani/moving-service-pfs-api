@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface DemandRepository extends JpaRepository<Demand, Long> {
 
     @Query( "SELECT d FROM Demand d WHERE d.sCity= :city " +
@@ -16,7 +16,6 @@ public interface DemandRepository extends JpaRepository<Demand, Long> {
             "WHERE s.status = 'DONE' )"
     )
     List<Demand> findForProvider(String city);
-
 
     List<Demand> findAllByClient(Client client);
 }
