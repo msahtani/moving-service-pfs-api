@@ -7,6 +7,7 @@ import ma.ensa.movingservice.exceptions.PermissionException;
 import ma.ensa.movingservice.exceptions.RecordNotFoundException;
 import ma.ensa.movingservice.models.Declamation;
 import ma.ensa.movingservice.models.user.Admin;
+import ma.ensa.movingservice.models.user.Client;
 import ma.ensa.movingservice.models.user.User;
 import ma.ensa.movingservice.repositories.DeclamationRepository;
 import ma.ensa.movingservice.repositories.user.UserRepository;
@@ -91,4 +92,21 @@ public class DeclamationService {
                 ).toList();
     }
 
+    public void deleteDeclamation(long id) {
+
+        User user = Auths.getUser();
+
+        Declamation declamation = declamationRepository
+                .findById(id)
+                .orElseThrow(RecordNotFoundException::new);
+
+        if(!(
+            (user instanceof Client client && client.getId() == declamation.getDeclaimer().getId())
+            || user instanceof Admin
+        )){
+            throw new PermissionException();
+        }
+
+        declamationRepository.delete(declamation);
+    }
 }

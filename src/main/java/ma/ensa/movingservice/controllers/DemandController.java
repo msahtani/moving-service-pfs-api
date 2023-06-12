@@ -22,7 +22,7 @@ public class DemandController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public List<DemandDTO> getDemands(){
+    public List<DemandDTO> getAllDemands(){
         return service.findAllDemands();
     }
 

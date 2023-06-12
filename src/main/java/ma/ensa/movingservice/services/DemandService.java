@@ -15,8 +15,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -44,52 +47,42 @@ public class DemandService {
 
         User user = Auths.getUser();
 
+        Stream<Demand> demands;
+
         if(user instanceof Provider provider){
+
             String city = provider.getCity();
 
-            return demandRepository
+            demands = demandRepository
                     .findForProvider(city)
-                    .stream().map(demand ->
-                            DemandDTO.builder()
-                                    .clientName(demand.getClient().getFullName())
-                                    .description(demand.getDescription())
-                                    .proposedPrice(demand.getProposedPrice())
-                                    .from(demand.getSCity())
-                                    .to(demand.getDCity())
-                                    .when(
-                                            formatter.format(demand.getApproxTime())
-                                    )
-                                    .createdAt(
-                                            formatter.format(demand.getCreatedAt())
-                                    )
-                                    .build()
-                    )
-                    .toList();
-        }
+                    .stream();
 
-        if(user instanceof Client client){
-
-            return demandRepository
+        }else if(user instanceof Client client){
+            demands = demandRepository
                     .findAllByClient(client)
-                    .stream().map(demand ->
-                            DemandDTO.builder()
-                                    .id(demand.getId())
-                                    .from(demand.getSCity())
-                                    .to(demand.getDCity())
-                                    .description(demand.getDescription())
-                                    .when(
-                                            formatter.format(demand.getApproxTime())
-                                    )
-                                    .createdAt(
-                                            formatter.format(demand.getCreatedAt())
-                                    )
-                                    .proposedPrice(demand.getProposedPrice())
-                                    .build()
-                    )
-                    .toList();
+                    .stream();
+        }else{
+            return Collections.emptyList();
         }
 
-        return null;
+
+        return demands
+                .map(demand ->
+                        DemandDTO.builder()
+                                .id(demand.getId())
+                                .from(demand.getSCity())
+                                .to(demand.getDCity())
+                                .description(demand.getDescription())
+                                .when(
+                                        formatter.format(demand.getApproxTime())
+                                )
+                                .createdAt(
+                                        formatter.format(demand.getCreatedAt())
+                                )
+                                .proposedPrice(demand.getProposedPrice())
+                                .build()
+                )
+                .toList();
 
     }
 

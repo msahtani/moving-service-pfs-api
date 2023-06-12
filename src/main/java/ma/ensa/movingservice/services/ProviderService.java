@@ -4,8 +4,6 @@ package ma.ensa.movingservice.services;
 import lombok.RequiredArgsConstructor;
 import ma.ensa.movingservice.dto.ProviderDTO;
 import ma.ensa.movingservice.exceptions.RecordNotFoundException;
-import ma.ensa.movingservice.models.Service;
-import ma.ensa.movingservice.models.Vehicle;
 import ma.ensa.movingservice.models.user.Client;
 import ma.ensa.movingservice.models.user.Provider;
 import ma.ensa.movingservice.models.user.User;
@@ -14,7 +12,6 @@ import ma.ensa.movingservice.repositories.user.ProviderRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor

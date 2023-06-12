@@ -35,4 +35,11 @@ public class DeclamationController {
         return "closed successfully";
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteDeclamation(@PathVariable long id){
+        service.deleteDeclamation(id);
+        return "deleted successfully";
+    }
+
 }
